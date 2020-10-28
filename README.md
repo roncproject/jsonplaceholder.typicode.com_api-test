@@ -26,8 +26,12 @@ This is a basic testautomation framework built with:
 * In the root of "java-cucumber-apitest", you will find a log file to make sense of the run
 
 # TODO
-* Obviously, make more Call requests
-* Add more API tests
+* This is is a work in progress
+ * Add all the requests (cancel, confirm)
+ * Add more tests
+ * Split up the "steps" file
+ * Move the logging level from INFO to TRACE 
+ * etc etc
 
 # Remarks
 * As there are no specs delivered with the Order-service, there are no defects, only remarks
