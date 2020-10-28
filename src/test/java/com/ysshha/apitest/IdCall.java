@@ -4,45 +4,36 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.junit.Assert;
 
+public class IdCall extends AbstractCall {
 
-public class ListCall extends AbstractCall {
+    private static final Logger logger = LogManager.getLogger(IdCall.class);
 
-    private static final Logger logger = LogManager.getLogger(ListCall.class);
-
-    public void getList() {
-        logger.trace("ListCall.getList()");
+    public void getId(int id) {
 
         RequestSpecification request = RestAssured.given();
-
-        response = request.get("/order/list");
+        String str = "/order/".concat(Integer.toString(id));
+        response = request.get(str);
+    
+        logger.trace("IdCall.getId(" + id + ") Request[" +  str + "]");
     }
 
     public void checkList() {
-        logger.trace("ListCall.checkList()");
+
 
         Assert.assertTrue(checkResponseContentType("application/json"));
         Assert.assertTrue(checkResponseStatusCode(200));
         Assert.assertTrue(checkResponseStatusLine("HTTP/1.1 200 "));
         Assert.assertTrue(checkResponseHeadersContain("Connection=keep-alive"));
+
+        logger.trace("IdCall.checkList()");
     }
 
-    public void numOrdersInList(int i) {
-        logger.trace("ListCall.ordersInList()");
+
+    public void checkOrderId(int ordId, String cardNum, String passNum,  String ordStat, int amount) {
 
         String str = response.asString();
-        JSONArray array = new JSONArray(str);
-
-        Assert.assertTrue(array.length() == i);
-    }
-
-    public void orderInList(int ordId, String cardNum, String passNum,  String ordStat, int amount) {
-        logger.trace("ListCall.ordersInList()");
-
-        String str = response.asString();
-        //JSONArray array = new JSONArray(str);
         String sub = str.substring(1, str.length() - 1);
 
         Assert.assertTrue(checkResponseKeyValueExists(sub, "orderId", ordId));
@@ -50,8 +41,10 @@ public class ListCall extends AbstractCall {
         Assert.assertTrue(checkResponseKeyValueExists(sub, "passNumber", passNum));
         Assert.assertTrue(checkResponseKeyValueExists(sub, "orderStatus", ordStat));
         Assert.assertTrue(checkResponseKeyValueExists(sub, "amount", amount));
-    }
 
+        logger.trace("IdCall.checkOrderId(" + ordId +
+                "," + cardNum + "," + passNum + "," + ordStat + "," + amount + ")");
+    }
 
 
 }

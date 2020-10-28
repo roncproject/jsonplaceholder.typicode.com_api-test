@@ -9,114 +9,99 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class AbstractCall {
 
-	private static final Logger logger = LogManager.getLogger(AbstractCall.class.getName());
+	private static final Logger 	logger = LogManager.getLogger(AbstractCall.class.getName());
+	public static String			baseURL;
+	protected static Response 		response;
+	protected static String 		jsonString;
 
-	public static String	baseURL;
-	protected static Response response;
-	protected static String jsonString;
 
 	AbstractCall() {
-		logger.info("AbstractCall.AbstractCall()");
-
+		logger.trace("AbstractCall.AbstractCall()");
 	}
 
-	public void initCalls(String s) {
-		logger.info("AbstractCall.initCalls(" + s + ")");
-		RestAssured.baseURI = s;
+	public void initCalls(String uri) {
 
+		RestAssured.baseURI = uri;
+		logger.trace("AbstractCall.initCalls(" + uri + ")");
 	}
+
 
 	public boolean checkResponseStatusCode(int code) {
-		logger.info("AbstractCall.checkResponseStatusCode(" + code + ") " + response.getStatusCode());
 
-		logger.info(response.getStatusLine());
-		logger.info(response.getHeaders());
+		int statusCode = response.getStatusCode();
 
-		return (response.getStatusCode() == code);
+		logger.trace("AbstractCall.checkResponseStatusCode(" + code + ") [" + statusCode + "]");
+
+		return ( statusCode == code);
 	}
+
 
 	public boolean checkResponseHeadersContain(String str) {
-		logger.info("AbstractCall.checkResponseHeadersContain(" + str + ")" + response.getHeaders().toString());
 
-		String s = response.getHeaders().toString();
+		String headers = response.getHeaders().toString();
 
-		return (s.contains( str ));
-	}
+		logger.trace("AbstractCall.checkResponseHeadersContain(" + str + ") [" + headers + "]");
 
-
-	public boolean checkResponseHeaders(String headers) {
-		logger.info("AbstractCall.checkResponseHeaders(" + headers + ")" + response.getHeaders());
-
-		return (response.getHeaders().toString().equals(headers));
+		return (headers.contains( str ));
 	}
 
 
 	public boolean checkResponseContentType(String type) {
-		logger.info("AbstractCall.checkResponseContentType("  + type + ") " + response.getContentType());
 
-		return (response.getContentType().equals(type));
+		String contentType = response.getContentType();
+
+		logger.trace("AbstractCall.checkResponseContentType("  + type + ") " + contentType);
+
+		return (contentType.equals(type));
 	}
 
 
 	public boolean checkResponseStatusLine(String line) {
-		logger.info("AbstractCall.checkResponseStatusLine(" + line + ") [" + response.getStatusLine() + "]");
 
-		return (response.getStatusLine().equals(line));
+		String statusLine = response.getStatusLine();
+
+		logger.trace("AbstractCall.checkResponseStatusLine(" + line + ") [" + statusLine + "]");
+
+		return (statusLine.equals(line));
 	}
 
 
 	public boolean checkResponseKeyExists(String response, String key) {
 
-		logger.info("AbstractCall.checkResponseKeyExists");
 		JsonParser parser = new JsonParser();
 		JsonObject jsonObject = parser.parse(response).getAsJsonObject();
-		logger.info(jsonObject.get(key));
+
+		logger.trace("AbstractCall.checkResponseKeyExists(" + response + "," + key + ")");
+
 		return jsonObject.has(key);
 	}
 
-	public boolean checkResponseKeyValueExists(String response, String key, String val) {
-//		logger.info("AbstractCall.checkResponseKeyValueExists("
-//				+ response + "," + key + "," + val + ")");
-		boolean ret;
+
+	public boolean checkResponseKeyValueExists(String response, String key, String value) {
+
 		JsonParser parser = new JsonParser();
 		JsonObject jsonObject = parser.parse(response).getAsJsonObject();
-		logger.info("============================");
-		String x = jsonObject.get(key).toString();
-		logger.info("a[key] [" + x + "]");
-		logger.info("val    [" + val + "]");
+		String key_value = jsonObject.get(key).toString();
 
-		ret = (val.equals(x));
-		logger.info("AbstractCall.checkResponseKeyValueExists("
-				+ response + "," + key + "," + val + ") => ["  +  jsonObject.get(key) + "] " + ret);
+		boolean ret = (value.equals(key_value));
+		logger.trace("AbstractCall.checkResponseKeyValueExists("
+				+ response + "," + key + "," + value + ") => ["  +  key_value + "] ");
 
 		return ret;
-
-	}
-
-	public boolean checkResponseKeyValueExists(String response, String key, int i) {
-//		logger.info("AbstractCall.checkResponseKeyValueExists("
-//				+ response + "," + key + "," + val + ")");
-		boolean ret;
-		JsonParser parser = new JsonParser();
-		JsonObject jsonObject = parser.parse(response).getAsJsonObject();
-		logger.info("============================");
-		String x = jsonObject.get(key).toString();
-		int y = Integer.parseInt(x);
-		logger.info("a[key] [" + y + "]");
-		logger.info("val    [" + i + "]");
-
-		ret = (i == y);
-		logger.info("AbstractCall.checkResponseKeyValueExists("
-				+ response + "," + key + "," + i + ") => ["  +  jsonObject.get(key) + "] " + ret);
-
-		return ret;
-
 	}
 
 
+	public boolean checkResponseKeyValueExists(String response, String key, int value) {
 
+		JsonParser parser = new JsonParser();
+		JsonObject jsonObject = parser.parse(response).getAsJsonObject();
+		int key_value = Integer.parseInt(jsonObject.get(key).toString());
+		boolean ret = (value == key_value);
 
+		logger.trace("AbstractCall.checkResponseKeyValueExists("
+				+ response + "," + key + "," + value + ") => ["  +  key_value + "] ");
 
-
+		return ret;
+	}
 
 }

@@ -16,6 +16,7 @@ public class StepDefinitions {
 
 	ListCall listCall;
 	CreateCall createCall;
+	IdCall idCall;
 
     @Before
     public void setUp() throws Throwable {
@@ -25,6 +26,8 @@ public class StepDefinitions {
 			listCall.initCalls("http://localhost:8080");
 			createCall = new CreateCall();
 			createCall.initCalls("http://localhost:8080");
+			idCall = new IdCall();
+			idCall.initCalls("http://localhost:8080");
 
 	}
 	
@@ -81,6 +84,20 @@ public class StepDefinitions {
 		createCall.checkCreate();
 	}
 
+
+	@Given("I search an Order {int}")
+	public void I_search_an_Order(int i) {
+		logger.info("StepDefinitions.I_search_an_Order(" + i + ")");
+
+		idCall.getId(i);
+	}
+
+	@When("The order is correct")
+	public void The_order_is_Correct() {
+		logger.info("StepDefinitions.The_order_is_Correct()");
+
+		createCall.checkCreate();
+	}
 
 
 	@After
