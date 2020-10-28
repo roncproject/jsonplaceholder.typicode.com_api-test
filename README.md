@@ -35,6 +35,6 @@ This is a basic testautomation framework built with:
 
 # Remarks
 * As there are no specs delivered with the Order-service, there are no defects, only remarks
-  * Just this what struck me what was needed to make the feature file run: 
-   * **I see order 1 with card "\"1\"" pass "\"10\"" status "\"CREATED\"" and amount 1001**
-    * Yes, we need double quotes here ... :( 
+  * I have to double quote the fields like: "\"1\"" pass "\"10\"" status "\"CREATED\"" and amount 1001 ?
+  * 
+    
