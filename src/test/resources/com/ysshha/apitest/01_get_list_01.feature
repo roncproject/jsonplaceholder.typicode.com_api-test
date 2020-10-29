@@ -24,3 +24,12 @@ Feature: Get a List
 		Then There are 1 orders
 		And I see order 1 with card "\"1\"" pass "\"10\"" status "\"CREATED\"" and amount 1001
 
+
+	Scenario: Confirm order
+		Given I confirm order 1 with 10
+		When The order is confirmed
+
+
+	Scenario: Search an order
+		Given I search an Order 1
+		When The order is correct
