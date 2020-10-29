@@ -36,5 +36,5 @@ This is a basic testautomation framework built with:
 # Remarks
 * As there are no specs delivered with the Order-service, there are no defects, only remarks
   * I have to double quote the fields like: "\"1\"" pass "\"10\"" status "\"CREATED\"" and amount 1001 
-  * 
+  * I have successfully confirmed an order, but the GUI still marks it as CREATED, I expected CONFIRMED
     
