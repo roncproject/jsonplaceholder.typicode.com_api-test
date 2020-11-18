@@ -16,13 +16,13 @@ public abstract class AbstractCall {
 
 
 	AbstractCall() {
-		logger.trace("AbstractCall.AbstractCall()");
+		logger.trace("AbstractCall()");
 	}
 
 	public void initCalls(String uri) {
 
 		RestAssured.baseURI = uri;
-		logger.trace("AbstractCall.initCalls(" + uri + ")");
+		logger.trace("initCalls(" + uri + ")");
 	}
 
 
@@ -30,7 +30,7 @@ public abstract class AbstractCall {
 
 		int statusCode = response.getStatusCode();
 
-		logger.trace("AbstractCall.checkResponseStatusCode(" + code + ") [" + statusCode + "]");
+		logger.trace("checkResponseStatusCode(" + code + ") [" + statusCode + "]");
 
 		return ( statusCode == code);
 	}
@@ -40,7 +40,7 @@ public abstract class AbstractCall {
 
 		String headers = response.getHeaders().toString();
 
-		logger.trace("AbstractCall.checkResponseHeadersContain(" + str + ") [" + headers + "]");
+		logger.trace("checkResponseHeadersContain(" + str + ") [" + headers + "]");
 
 		return (headers.contains( str ));
 	}
@@ -50,7 +50,7 @@ public abstract class AbstractCall {
 
 		String contentType = response.getContentType();
 
-		logger.trace("AbstractCall.checkResponseContentType("  + type + ") " + contentType);
+		logger.trace("checkResponseContentType("  + type + ") [" + contentType + "]");
 
 		return (contentType.equals(type));
 	}
@@ -60,7 +60,7 @@ public abstract class AbstractCall {
 
 		String statusLine = response.getStatusLine();
 
-		logger.trace("AbstractCall.checkResponseStatusLine(" + line + ") [" + statusLine + "]");
+		logger.trace("checkResponseStatusLine(" + line + ") [" + statusLine + "]");
 
 		return (statusLine.equals(line));
 	}
@@ -71,9 +71,40 @@ public abstract class AbstractCall {
 		JsonParser parser = new JsonParser();
 		JsonObject jsonObject = parser.parse(response).getAsJsonObject();
 
-		logger.trace("AbstractCall.checkResponseKeyExists(" + response + "," + key + ")");
+		boolean	hasKey = jsonObject.has(key);	
 
-		return jsonObject.has(key);
+		logger.trace("checkResponseKeyExists(" + key + ") [" + hasKey + "]");
+
+		return hasKey;
+	}
+
+
+	public String getResponseKeyValue(String response, String key) {
+
+		String ret = "";
+
+		JsonParser parser = new JsonParser();
+		JsonObject jsonObject = parser.parse(response).getAsJsonObject();
+		ret = jsonObject.get(key).toString();
+
+		logger.trace("getResponseKeyValue(" + key + ") => ["  +  ret + "] ");
+
+		return ret;
+	}
+
+	
+	public String getResponseKeyValue(String key) {
+
+		String ret = "";
+		String s =  response.asString();
+
+		JsonParser parser = new JsonParser();
+		JsonObject jsonObject = parser.parse(s).getAsJsonObject();
+		ret = jsonObject.get(key).toString();
+
+		logger.trace("getResponseKeyValue(" +  key + ")");
+
+		return ret;
 	}
 
 
@@ -84,8 +115,7 @@ public abstract class AbstractCall {
 		String key_value = jsonObject.get(key).toString();
 
 		boolean ret = (value.equals(key_value));
-		logger.trace("AbstractCall.checkResponseKeyValueExists("
-				+ response + "," + key + "," + value + ") => ["  +  key_value + "] ");
+		logger.trace("checkResponseKeyValueExists(" + key + "," + value + ") => ["  +  key_value + "] ");
 
 		return ret;
 	}
@@ -98,8 +128,7 @@ public abstract class AbstractCall {
 		int key_value = Integer.parseInt(jsonObject.get(key).toString());
 		boolean ret = (value == key_value);
 
-		logger.trace("AbstractCall.checkResponseKeyValueExists("
-				+ response + "," + key + "," + value + ") => ["  +  key_value + "] ");
+		logger.trace("checkResponseKeyValueExists(" + key + "," + value + ") => ["  +  key_value + "] ");
 
 		return ret;
 	}
