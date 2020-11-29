@@ -1,5 +1,6 @@
 package com.ysshha.apitest;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.restassured.RestAssured;
@@ -13,6 +14,7 @@ public abstract class AbstractCall {
 	public static String			baseURL;
 	protected static Response 		response;
 	protected static String 		jsonString;
+	protected int Id = -1; 
 
 
 	AbstractCall() {
@@ -23,14 +25,14 @@ public abstract class AbstractCall {
 
 		RestAssured.baseURI = uri;
 		logger.trace("initCalls(" + uri + ")");
-	}
+ 	}
 
 
 	public boolean checkResponseStatusCode(int code) {
 
 		int statusCode = response.getStatusCode();
 
-		logger.trace("checkResponseStatusCode(" + code + ") [" + statusCode + "]");
+		logger.trace("checkResponseStatusCode(" + code + ") [" + statusCode + "], [" + response.getStatusLine() + "]");
 
 		return ( statusCode == code);
 	}
@@ -79,33 +81,86 @@ public abstract class AbstractCall {
 	}
 
 
-	public String getResponseKeyValue(String response, String key) {
+	// public String getResponseKeyValue(String response, String key) {
 
-		String ret = "";
+	// 	String ret = "";
 
-		JsonParser parser = new JsonParser();
-		JsonObject jsonObject = parser.parse(response).getAsJsonObject();
-		ret = jsonObject.get(key).toString();
+	// 	JsonParser parser = new JsonParser();
+	// 	JsonObject jsonObject = parser.parse(response).getAsJsonObject();
+	// 	ret = jsonObject.get(key).toString();
 
-		logger.trace("getResponseKeyValue(" + key + ") => ["  +  ret + "] ");
+	// 	logger.trace("getResponseKeyValue(" + key + ") => ["  +  ret + "] ");
 
-		return ret;
-	}
+	// 	return ret;
+	// }
 
 	
 	public String getResponseKeyValue(String key) {
 
 		String ret = "";
-		String s =  response.asString();
+		String s;
 
-		JsonParser parser = new JsonParser();
-		JsonObject jsonObject = parser.parse(s).getAsJsonObject();
-		ret = jsonObject.get(key).toString();
+		try {
+			s =  response.asString();
+			System.out.println("key: [" + key + "] s: [" +  s + "]");	
 
-		logger.trace("getResponseKeyValue(" +  key + ")");
+			JsonParser parser = new JsonParser();
+			JsonObject jsonObject = parser.parse(s).getAsJsonObject();
+			JsonElement js = jsonObject.get(key);
+			ret = js.toString();
+			System.out.println("ret: [" +  ret + "]");	
+		
+		} catch (Exception e) {
 
+			System.out.println("e: " + e.getMessage());	
+			
+		} finally {
+
+			logger.trace("getResponseKeyValue(" +  key + ") [" + ret + "]");
+		}
 		return ret;
 	}
+
+
+	public String getDataKeyValue(String key) {
+
+		String ret = "";
+		String s;
+		String data;
+
+		try {
+			s =  response.asString();
+			System.out.println("keyx: [" + key + "] sx: [" +  s + "]");	
+
+			JsonParser parser = new JsonParser();
+			JsonObject jsonObject = parser.parse(s).getAsJsonObject();
+			JsonElement js = jsonObject.get("data");
+			data = js.toString();
+			System.out.println("key: [" + key + "] data: [" +  data + "]");	
+			JsonObject jsonObj = parser.parse(data).getAsJsonObject();
+			JsonElement je = jsonObj.get(key);
+			String str = je.toString();
+			ret = str.substring(1, str.length() - 1);
+
+			System.out.println("ret: [" +  ret + "]");	
+		
+		} catch (Exception e) {
+
+			System.out.println("e: " + e.getMessage());	
+
+			
+		} finally {
+
+			logger.trace("getDataKeyValue(" +  key + ") [" + ret + "]");
+	
+		}
+
+		return ret;
+
+	}
+
+
+
 
 
 	public boolean checkResponseKeyValueExists(String response, String key, String value) {

@@ -35,17 +35,17 @@ public abstract class AbstractGetCall extends AbstractCall {
         logger.trace("checkGetCall()");
     }
 
-    public void numFramesInGetCall(int i) {
+    // public void numFramesInGetCall(int i) {
 
-        String str = response.asString();
-        String s = getResponseKeyValue(str, "data");
+    //     String str = response.asString();
+    //     String s = getResponseKeyValue(str, "data");
 
-        JSONArray array = new JSONArray(s);
-        int len = array.length();
+    //     JSONArray array = new JSONArray(s);
+    //     int len = array.length();
 
-        logger.trace("numFramesInGetCall(" + i + ") = [" + s + "] length: [" + len + "]");
+    //     logger.trace("numFramesInGetCall(" + i + ") = [" + s + "] length: [" + len + "]");
 
-    }
+    // }
 
 
     public void minFramesInGetCall(int i) {

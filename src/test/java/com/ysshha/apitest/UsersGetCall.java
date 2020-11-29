@@ -19,6 +19,19 @@ public class UsersGetCall extends AbstractGetCall {
         logger.trace("getUsers()");
     }
 
+
+    public void getUsers(int user) {
+
+        String s = "/public-api/users/" + user;
+
+        getCall(s);       
+
+        logger.trace("getUsers()");
+    }
+
+    
+
+
 }
 
 
