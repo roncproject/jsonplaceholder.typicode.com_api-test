@@ -2,115 +2,112 @@ package com.ysshha.apitest;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 
 
 public class UserSteps {
 
 	private static final Logger logger = LogManager.getLogger(UserSteps.class);
 
-	UsersGetCall	us;
-	UsersGetCall	usersCall;
-	UsersPostCall	usersPost;
+	User	us;
 
     @Before
     public void setUp() throws Throwable {
 
-		usersCall = new UsersGetCall();
-		usersCall.initCalls("https://gorest.co.in");
-
-		usersPost = new UsersPostCall();
-		usersPost.initCalls("https://gorest.co.in");
+		us = new User();
 
 		logger.trace("setUp()");
 	}
 
-	@Given("I GET Users")
-	public void i_get_users() {
+	@When("I list all users")
+	public void i_list_all_users() {
 
-		usersCall.getUsers();
+		us.list();
 
-	 	logger.trace("i_get_users()");
-	}
-	
-
-	@Given("I GET User {int}")
-	public void i_get_users(int i) {
-
-		usersCall.getUsers(i);
-
-		logger.trace("i_get_users(" + i + ")");
+	 	logger.trace("i_list_all_users()");
 	}
 
 
+	@When("I list user with id: {int}")
+	public void i_list_user_with_id_int(int i) {
 
-	@When ("I check GET CALL")
-	public void i_check_get_call() {
+		us.list(i);
 
-		usersCall.checkGetCall();
-
-		logger.trace("i_check_get_call()");
+		logger.trace("i_list_user_with_id_int()");
 	}
 
-	@Then ("I see GET CALL is not empty")
-	public void i_see_get_call_is_not_empty() {
+	@Then("result is not empty")
+	public void result_is_not_empty() {
 
-		usersCall.minFramesInGetCall(0);
+		Assert.assertFalse(us.getResponse().equals("{}"));
 
-		logger.trace("i_check_get_call()");
-	}
-  
-
-	@Given ("I create an user, with name: {string}, gender: {string}, email: {string}, and status: {string}")
-	public void i_create_an_user_with(String name, String gender, String email, String status) {
-
-		StringBuilder sb = new StringBuilder();
-        sb.append("{\"name\":\"");
-        sb.append(name);
-        sb.append("\", \"gender\":\"");
-        sb.append(gender);
-        sb.append("\", \"email\":\"");
-		sb.append(email);
-        sb.append("\", \"status\":\"");
-		sb.append(status);
-        sb.append("\"}");
-		String data = sb.toString();
-		
-		usersPost.postCreateUser(data);
-
-		logger.trace("i_create_an_user_with(" + name + ")");
+		logger.trace("result_is_not_empty()");
 	}
 
-	@When ("I check the response")
-	public void i_check_the_post_call() {
+	@Then("I get user with id: {int}")
+	public void i_get_user_with_id_int(int i) {
 
-		//usersCall.minFramesInGetCall(0);
-		usersPost.checkGetCall();
+    	int id = us.getId(i);
 
-		logger.trace("i_check_the_post_call()");
+		Assert.assertTrue(id == i);
+
+		logger.trace("i_get_user_with_id_int() i = [" + i + "] id [" + id + "]" );
 	}
 
-	@Then ("I see name: {string}")
-	public void i_see_name(String name) {
 
-		logger.trace("i_see_name(" + name + ")");
-		
-		usersPost.checkName(name);
+	@Then("I get no user")
+	public void i_get_no_user() {
 
-		
+		Assert.assertTrue(us.getResponse().equals("{}"));
+
+		logger.trace("i_get_no_user()");
 	}
 
-	@After
-    public void tearDown() throws Throwable {
+	@Then("Username: {string} gets no result")
+	public void username_string_gets_no_result(String s) {
 
-		logger.trace("tearDown()");
+		Assert.assertTrue(us.getId(s).equals(""));
 
+		logger.trace("username_string_gets_no_result()");
 	}
+
+	@Then("Username: {string} gets result: {string}")
+	public void username_string_gets_result_string(String s1, String s2) {
+
+		Assert.assertTrue(us.getId(s1).equals(s2));
+
+		logger.trace("username_string_gets_result_string()");
+	}
+
+
+////	@Then("I get no response")
+////	public void i_get_no_response() {
+////
+////    	String s = us.getResponse();
+////
+////		logger.trace("i_get_no_response() ==> [" + s + "]");
+////
+////		Assert.assertTrue(s.equals(""));
+////
+////		logger.trace("i_get_no_response()");
+//	}
+
+
+
+	@When("I list user with username: {string}")
+	public void i_list_user_with_username_string(String s) {
+
+		us.list(s);
+
+		logger.trace("i_list_user_with_username_string()");
+	}
+
+
 
 }
 

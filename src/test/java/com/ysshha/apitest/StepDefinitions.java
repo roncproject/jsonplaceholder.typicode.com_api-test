@@ -14,7 +14,7 @@ public class StepDefinitions {
 
 	private static final Logger logger = LogManager.getLogger(StepDefinitions.class);
 
-	UsersGetCall	users;
+
 
     @Before
     public void setUp() throws Throwable {
