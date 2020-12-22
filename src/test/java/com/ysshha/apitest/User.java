@@ -41,9 +41,9 @@ public class User extends Resource {
 
     public String getId(String userName) {
 
-//        String  s = "/users/";
-//
-//        get(s);
+        String  s = "/users/";
+
+        get(s);
 
         String id = getKeyStringValueFromJSONObject(getJSONObjectByKeyValue("username", userName), "id");
 

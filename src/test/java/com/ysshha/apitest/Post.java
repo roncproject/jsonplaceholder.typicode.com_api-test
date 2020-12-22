@@ -59,8 +59,6 @@ public class Post extends Resource {
         logger.trace("list(int)");
     }
 
-
-
     public void list(String userId) {
 
         String  s = "/posts/";
@@ -74,9 +72,9 @@ public class Post extends Resource {
 
     public String getId(String userName) {
 
-//        String  s = "/users/";
-//
-//        get(s);
+        String  s = "/users/";
+
+        get(s);
 
         String id = getKeyStringValueFromJSONObject(getJSONObjectByKeyValue("username", userName), "id");
 
