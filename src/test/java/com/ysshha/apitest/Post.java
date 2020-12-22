@@ -1,6 +1,14 @@
 package com.ysshha.apitest;
 
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.json.JSONObject;
+
+import java.util.Collection;
+import java.util.Iterator;
+
 public class Post extends Resource {
 
     Post(){
@@ -30,7 +38,23 @@ public class Post extends Resource {
 
         get(s);
 
-        getJSONObjectByKeyValue("userId", userId);
+        Collection c = getCollectionJSONObjectByKeyValue("userId", userId);
+        Iterator iterator = c.iterator();
+        while (iterator.hasNext()) {
+
+            JSONObject jo = (JSONObject) iterator.next();
+            if (jo != null) {
+
+                JsonParser parser = new JsonParser();
+
+                JsonObject jsonObj = parser.parse(jo.toString()).getAsJsonObject();
+                JsonElement je = jsonObj.get("title");
+                String t = je.toString();
+                System.out.println("bla bla: ["  + t +  "]");
+            }
+
+
+        }
 
         logger.trace("list(int)");
     }

@@ -168,10 +168,6 @@ public class Resource {
     }
 
 
-
-
-
-
     public String getKeyStringValueFromJSONObject(JSONObject jo, String key) {
 
         logger.trace("getKeyStringValueFromJSONObject");
