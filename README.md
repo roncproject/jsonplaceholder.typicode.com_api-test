@@ -14,27 +14,21 @@ This is a basic testautomation framework built with:
 * Cucumber, Rest-assured, Junit, etc : see POM
 * (optional) IntelliJ (2020 1 1 Community edition)
 * Git
-* Order-service test app
+
 
 # Installation
-* Clone repo at: https://github.com/roncproject/java-cucumber-apitest 
-* Install Order-service test app
+* Clone repo at: https://github.com/roncproject/jsonplaceholder.typicode.com_api-test 
+
 
 # Usage
-* Start the Order-service **BEFORE** every test run (otherwise the test sums in the features will not add up )
 * Run the test with "mvn test"
-* In the root of "java-cucumber-apitest", you will find a log file to make sense of the run
+* In the root of "jsonplaceholder.typicode.com_api-test", you will find a log file to make sense of the run
 
 # TODO
-* This is is a work in progress
- * Add all the requests (cancel, confirm)
+* This is a work in progress
+ * Add all the requests 
  * Add more tests
- * Split up the "steps" file
- * Move the logging level from INFO to TRACE 
  * etc etc
 
 # Remarks
-* As there are no specs delivered with the Order-service, there are no defects, only remarks
-  * I have to double quote the fields like: "\"1\"" pass "\"10\"" status "\"CREATED\"" and amount 1001 
-  * I have successfully confirmed an order, but the GUI still marks it as CREATED, I expected CONFIRMED
     
